@@ -7,15 +7,15 @@ jobs:
     runs-on: ubuntu-latest
     name: A job to say hello
     steps:
-        uses: actions/checkout@v1
-        uses: actions/setup-node@v1
-        with:
-          node-version: 10.x
-        run: npm install
-      - name: Hello world action step
-        id: hello
-        uses: ./.github/actions/test-action
-        with:
-          who-to-greet: 'Glen the Codemonger'
-      - name: Get output time
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 10.x
+      run: npm install
+    - name: Hello world action step
+      id: hello
+      uses: ./.github/actions/test-action
+      with:
+        who-to-greet: 'Glen the Codemonger'
+    - name: Get output time
+      run: echo "The time was ${{ steps.hello.outputs.time }}"
