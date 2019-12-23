@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/RDegnen/actions-experiment/issues"
   },
-  "homepage": "https://github.com/RDegnen/actions-experiment#readme"
+  "homepage": "https://github.com/RDegnen/actions-experiment#readme",
+  "devDependencies": {
+    "@actions/core": "^1.2.0",
+    "@actions/github": "^2.0.0"
+  }
 }
