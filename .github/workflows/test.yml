@@ -19,6 +19,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag: 'v1.0.0'
-    - uses: actions/checkout@${{ steps.release-branch.outputs.branch-name }}
+    # - uses: actions/checkout@${{ steps.release-branch.outputs.branch-name }}
     - name: Update package.json
       run: echo "Release branch is ${{ steps.release-branch.outputs.branch-name }}"
