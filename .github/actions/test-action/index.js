@@ -1,14 +1,35 @@
 const core = require('@actions/core')
-const github = require('@actions/github')
+const { Github, context } = require('@actions/github')
 
-try {
-  const nameToGreet = core.getInput('who-to-greet')
-  console.log(`Hello ${nameToGreet}`)
-  const time = (new Date()).toTimeString()
-  core.setOutput("time", time)
+async function run() {
+  try {
+    const octokit = new Github(process.env.GITHUB_TOKEN)
+    const { owner, repo } = context.repo
+    const tag = core.getInput('tag')
 
-  const payload = JSON.stringify(github.context.payload, undefined, 2)
-  console.log('Event payload', payload)
-} catch (err) {
-  core.setFailed(err.message)
+    const createRefResponse = await octokit.git.createRef({
+      owner,
+      repo,
+      ref: `refs/head/release-${tag}`,
+      sha: context.payload.head_commit.id
+    })
+
+    console.log(JSON.stringify(createRefResponse))
+  } catch (err) {
+    core.setFailed(err.message)
+  }
+
 }
+
+run()
+// try {
+//   const nameToGreet = core.getInput('who-to-greet')
+//   console.log(`Hello ${nameToGreet}`)
+//   const time = (new Date()).toTimeString()
+//   core.setOutput("time", time)
+
+//   const payload = JSON.stringify(context.payload, undefined, 2)
+//   console.log('Event payload', payload)
+// } catch (err) {
+//   core.setFailed(err.message)
+// }

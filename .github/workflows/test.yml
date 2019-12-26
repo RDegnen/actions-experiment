@@ -12,10 +12,13 @@ jobs:
       with:
         node-version: 10.x
     - run: npm install
-    - name: Hello world action step
-      id: hello
+    - name: Test Action
+      id: test
       uses: ./.github/actions/test-action
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         who-to-greet: 'Glen the Codemonger'
+        tag: 'v1.0.0'
     - name: Get output time
       run: echo "The time was ${{ steps.hello.outputs.time }}"
