@@ -1,13 +1,12 @@
 name: 'Test'
-description: 'Greet someone and record time'
+description: 'Create a release branch'
 inputs:
-  who-to-greet:
-    description: 'Who to greet'
+  tag:
+    description: 'Version tag'
     required: true
-    default: 'World'
 outputs:
-  time:
-    description: 'Time we greeted you'
+  branch-name:
+    description: 'Release branch name'
 runs:
   using: 'node12'
   main: 'index.js'

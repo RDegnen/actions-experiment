@@ -2,10 +2,12 @@ name: Test Action
 
 on: [push]
 
+version: 'v1.0.2'
+
 jobs:
   test_job:
     runs-on: ubuntu-latest
-    name: A job to say hello
+    name: A job that creates a release
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v1
@@ -18,9 +20,11 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag: 'v1.0.1'
+        tag: version
     - uses: actions/checkout@v2
       with:
         ref: ${{ steps.release-branch.outputs.branch-name }}
     - name: Update package.json
-      run: echo "Release branch is ${{ steps.release-branch.outputs.branch-name }}"
+      uses: ./.github/actions/update-package-file
+      with:
+        tag: version
