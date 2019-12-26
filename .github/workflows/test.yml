@@ -2,7 +2,7 @@ name: Test Action
 
 on: [push]
 
-version: 
+env: 
   tag: 'v1.0.2'
 
 jobs:
@@ -20,12 +20,12 @@ jobs:
       uses: ./.github/actions/test-action
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag: version.tag
+      # with:
+      #   tag: version.tag
     - uses: actions/checkout@v2
       with:
         ref: ${{ steps.release-branch.outputs.branch-name }}
     - name: Update package.json
       uses: ./.github/actions/update-package-file
-      with:
-        tag: version.tag
+      # with:
+      #   tag: version.tag

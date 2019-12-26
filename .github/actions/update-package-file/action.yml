@@ -1,9 +1,9 @@
 name: 'Update package file'
 description: 'update version in package.json'
-inputs:
-  tag:
-    description: 'Version tag'
-    required: true
+# inputs:
+#   tag:
+#     description: 'Version tag'
+#     required: true
 runs:
   using: 'node12'
   main: 'index.js'

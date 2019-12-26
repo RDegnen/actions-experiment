@@ -4,8 +4,7 @@ const { context, GitHub } = require('@actions/github')
 async function createReleaseBranch() {
   const octokit = new GitHub(process.env.GITHUB_TOKEN)
   const { owner, repo } = context.repo
-  const tag = core.getInput('tag')
-  const releaseBranch = `release-${tag}`
+  const releaseBranch = `release-${process.env.tag}`
   core.setOutput('branch-name', releaseBranch)
 
   return await octokit.git.createRef({
