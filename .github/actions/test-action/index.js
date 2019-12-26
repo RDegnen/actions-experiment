@@ -13,8 +13,8 @@ async function run() {
       ref: `refs/head/release-${tag}`,
       sha: context.payload.head_commit.id
     })
-
-    console.log(JSON.stringify(createRefResponse))
+    console.log(context.payload.head_commit.id, repo, owner)
+    console.log(JSON.stringify(createRefResponse, undefined, 2))
   } catch (err) {
     core.setFailed(err.message)
   }
