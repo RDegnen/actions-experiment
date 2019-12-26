@@ -1,19 +1,25 @@
 const core = require('@actions/core')
 const { context, GitHub } = require('@actions/github')
 
+async function createReleaseBranch() {
+  const octokit = new GitHub(process.env.GITHUB_TOKEN)
+  const { owner, repo } = context.repo
+  const tag = core.getInput('tag')
+  const releaseBranch = `release-${tag}`
+  core.setOutput('branch-name', releaseBranch)
+
+  return await octokit.git.createRef({
+    owner,
+    repo,
+    ref: `refs/heads/${releaseBranch}`,
+    sha: context.payload.head_commit.id
+  })
+}
+
 async function run() {
   try {
-    const octokit = new GitHub(process.env.GITHUB_TOKEN)
-    const { owner, repo } = context.repo
-    const tag = core.getInput('tag')
+    const createRefResponse = await createReleaseBranch()
 
-    const createRefResponse = await octokit.git.createRef({
-      owner,
-      repo,
-      ref: `refs/heads/release-${tag}`,
-      sha: context.payload.head_commit.id
-    })
-    console.log(context.payload.head_commit.id, repo, owner)
     console.log(JSON.stringify(createRefResponse, undefined, 2))
   } catch (err) {
     core.setFailed(err.message)
