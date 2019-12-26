@@ -5,7 +5,7 @@ on: [push]
 jobs:
   test_job:
     env: 
-      tag: 'v1.0.3'
+      tag: 'v1.0.4'
     runs-on: ubuntu-latest
     name: A job that creates a release
     steps:
@@ -24,6 +24,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         ref: ${{ steps.release-branch.outputs.branch-name }}
+    - run: npm install
     - name: Update package.json
       uses: ./.github/actions/update-package-file
       # with:
