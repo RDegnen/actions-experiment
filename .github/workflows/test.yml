@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     name: A job to say hello
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - uses: actions/setup-node@v1
       with:
         node-version: 10.x
@@ -18,7 +18,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag: 'v1.0.0'
-    # - uses: actions/checkout@${{ steps.release-branch.outputs.branch-name }}
+        tag: 'v1.0.1'
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ steps.release-branch.outputs.branch-name }}
     - name: Update package.json
       run: echo "Release branch is ${{ steps.release-branch.outputs.branch-name }}"
