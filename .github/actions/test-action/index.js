@@ -10,7 +10,7 @@ async function run() {
     const createRefResponse = await octokit.git.createRef({
       owner,
       repo,
-      ref: `refs/head/release-${tag}`,
+      ref: `refs/heads/release-${tag}`,
       sha: context.payload.head_commit.id
     })
     console.log(context.payload.head_commit.id, repo, owner)
