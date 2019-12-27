@@ -19,7 +19,7 @@ async function run() {
     const { email } = context.payload.pusher
     const packageFiles = ['package.json', 'package-lock.json']
 
-    packageFiles.forEach(packageFileName => {
+    packageFiles.forEach(async packageFileName => {
       const packageFilePath = path.join(
         process.env.GITHUB_WORKSPACE,
         packageFileName
