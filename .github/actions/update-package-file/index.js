@@ -17,38 +17,41 @@ async function run() {
     const octokit = new GitHub(process.env.GITHUB_TOKEN)
     const { owner, repo } = context.repo
     const { email } = context.payload.pusher
-    const packageFileName = 'package.json'
-    const packageFilePath = path.join(
-      process.env.GITHUB_WORKSPACE,
-      packageFileName
-    )
-    const packageObj = JSON.parse(await promisifyCallback(fs.readFile, packageFilePath))
-    packageObj.version = process.env.tag
-    const jsonPackage = JSON.stringify(packageObj, undefined, 2)
+    const packageFiles = ['package.json', 'package-lock.json']
 
-    const { data: { sha } } = await octokit.repos.getContents({
-      owner,
-      repo,
-      path: packageFileName
+    packageFiles.forEach(packageFileName => {
+      const packageFilePath = path.join(
+        process.env.GITHUB_WORKSPACE,
+        packageFileName
+      )
+      const packageObj = JSON.parse(await promisifyCallback(fs.readFile, packageFilePath))
+      packageObj.version = process.env.tag
+      const jsonPackage = JSON.stringify(packageObj, undefined, 2)
+  
+      const { data: { sha } } = await octokit.repos.getContents({
+        owner,
+        repo,
+        path: packageFileName
+      })
+  
+      const userInfo = {
+        name: owner,
+        email
+      }
+  
+      const updateFileResponse = await octokit.repos.createOrUpdateFile({
+        owner,
+        repo,
+        path: packageFileName,
+        message: `Update ${packageFileName} version to ${process.env.tag}`,
+        content: Buffer.from(jsonPackage).toString('base64'),
+        sha,
+        branch: core.getInput('ref'),
+        committer: userInfo,
+        author: userInfo
+      })
+      console.log(updateFileResponse)
     })
-
-    const userInfo = {
-      name: owner,
-      email
-    }
-
-    const updateFileResponse = await octokit.repos.createOrUpdateFile({
-      owner,
-      repo,
-      path: packageFileName,
-      message: `Update package version to ${process.env.tag}`,
-      content: Buffer.from(jsonPackage).toString('base64'),
-      sha,
-      branch: core.getInput('ref'),
-      committer: userInfo,
-      author: userInfo
-    })
-    console.log(updateFileResponse)
   } catch (err) {
     core.setFailed(err.message)
   }
