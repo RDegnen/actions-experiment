@@ -14,6 +14,8 @@ jobs:
     name: A job that creates a tag
     steps:
     - uses: actions/checkout@v2
+      with:
+        ref: develop
     - uses: actions/setup-node@v1
       with:
         node-version: 10.x
