@@ -12,47 +12,48 @@ function promisifyCallback(fn, ...args) {
   })
 }
 
+async function updatePackageFile(packageFileName) {
+  const octokit = new GitHub(process.env.GITHUB_TOKEN)
+  const { owner, repo } = context.repo
+  const { email } = context.payload.pusher
+  const packageFilePath = path.join(
+    process.env.GITHUB_WORKSPACE,
+    packageFileName
+  )
+  const packageObj = JSON.parse(await promisifyCallback(fs.readFile, packageFilePath))
+  packageObj.version = process.env.tag
+  const jsonPackage = JSON.stringify(packageObj, undefined, 2)
+
+  const { data: { sha } } = await octokit.repos.getContents({
+    owner,
+    repo,
+    path: packageFileName
+  })
+
+  const userInfo = {
+    name: owner,
+    email
+  }
+
+  const updateFileResponse = await octokit.repos.createOrUpdateFile({
+    owner,
+    repo,
+    path: packageFileName,
+    message: `Update ${packageFileName} version to ${process.env.tag}`,
+    content: Buffer.from(jsonPackage).toString('base64'),
+    sha,
+    branch: core.getInput('ref'),
+    committer: userInfo,
+    author: userInfo
+  })
+  console.log(updateFileResponse)
+}
+
 async function run() {
   try {
-    const octokit = new GitHub(process.env.GITHUB_TOKEN)
-    const { owner, repo } = context.repo
-    const { email } = context.payload.pusher
     const packageFiles = ['package.json', 'package-lock.json']
 
-    packageFiles.forEach(async packageFileName => {
-      const packageFilePath = path.join(
-        process.env.GITHUB_WORKSPACE,
-        packageFileName
-      )
-      console.log(packageFilePath)
-      const packageObj = JSON.parse(await promisifyCallback(fs.readFile, packageFilePath))
-      packageObj.version = process.env.tag
-      const jsonPackage = JSON.stringify(packageObj, undefined, 2)
-      console.log('1')
-      const { data: { sha } } = await octokit.repos.getContents({
-        owner,
-        repo,
-        path: packageFileName
-      })
-      console.log('2', sha)
-      const userInfo = {
-        name: owner,
-        email
-      }
-      
-      const updateFileResponse = await octokit.repos.createOrUpdateFile({
-        owner,
-        repo,
-        path: packageFileName,
-        message: `Update ${packageFileName} version to ${process.env.tag}`,
-        content: Buffer.from(jsonPackage).toString('base64'),
-        sha,
-        branch: core.getInput('ref'),
-        committer: userInfo,
-        author: userInfo
-      })
-      console.log(updateFileResponse)
-    })
+    packageFiles.forEach(fileName => await updatePackageFile(fileName))
   } catch (err) {
     core.setFailed(err.message)
   }
