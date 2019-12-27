@@ -53,7 +53,9 @@ async function run() {
   try {
     const packageFiles = ['package.json', 'package-lock.json']
 
-    packageFiles.forEach(fileName => await updatePackageFile(fileName))
+    for (fileName of packageFiles) {
+      await updatePackageFile(fileName)
+    }
   } catch (err) {
     core.setFailed(err.message)
   }
