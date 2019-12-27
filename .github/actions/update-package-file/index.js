@@ -30,29 +30,30 @@ async function run() {
     // To commit an update directly to a branch, might not need to checkout the release branch before this.
     // https://octokit.github.io/rest.js/#octokit-routes-repos-create-or-update-file
 
-    const file = await octokit.repos.getContents({
+    const { data: { sha } } = await octokit.repos.getContents({
       owner,
       repo,
       path: packageFileName
     })
 
-    console.log(file)
-    // const updateFileResponse = await octokit.repos.createOrUpdateFile({
-    //   owner,
-    //   repo,
-    //   path: packageFileName,
-    //   message: `Update package version to ${process.env.tag}`,
-    //   content: Buffer.from(jsonPackage).toString('base64'),
-    //   sha: '',
-    //   committer: {
-    //     name: owner,
-    //     email
-    //   },
-    //   author: {
-    //     name: owner,
-    //     email
-    //   }
-    // })
+    const updateFileResponse = await octokit.repos.createOrUpdateFile({
+      owner,
+      repo,
+      path: packageFileName,
+      message: `Update package version to ${process.env.tag}`,
+      content: Buffer.from(jsonPackage).toString('base64'),
+      sha,
+      branch: core.getInput('ref'),
+      committer: {
+        name: owner,
+        email
+      },
+      author: {
+        name: owner,
+        email
+      }
+    })
+    console.log(updateFileResponse)
   } catch (err) {
     core.setFailed(err.message)
   }
