@@ -25,6 +25,7 @@ async function run() {
     packageObj.version = process.env.tag
     const jsonPackage = JSON.stringify(packageObj)
     console.log(context)
+    console.log(context.repo)
     // To commit an update directly to a branch, might not need to checkout the release branch before this.
     // https://octokit.github.io/rest.js/#octokit-routes-repos-create-or-update-file
 
