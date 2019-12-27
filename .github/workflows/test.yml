@@ -8,7 +8,7 @@ on:
 jobs:
   test_job:
     env: 
-      tag: 'v1.0.6'
+      tag: 'v1.0.7'
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: ubuntu-latest
     name: A job that creates a release
