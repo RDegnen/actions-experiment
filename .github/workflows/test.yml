@@ -18,10 +18,10 @@ jobs:
     - name: Create release branch
       id: release-branch
       uses: ./.github/actions/test-action
-    - uses: actions/checkout@v2
-      with:
-        ref: ${{ steps.release-branch.outputs.branch-name }}
-    - run: npm install
+    # - uses: actions/checkout@v2
+    #   with:
+    #     ref: ${{ steps.release-branch.outputs.branch-name }}
+    # - run: npm install
     - name: Update package.json
       uses: ./.github/actions/update-package-file
       with: 

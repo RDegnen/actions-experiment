@@ -32,6 +32,11 @@ async function run() {
       path: packageFileName
     })
 
+    const userInfo = {
+      name: owner,
+      email
+    }
+
     const updateFileResponse = await octokit.repos.createOrUpdateFile({
       owner,
       repo,
@@ -40,14 +45,8 @@ async function run() {
       content: Buffer.from(jsonPackage).toString('base64'),
       sha,
       branch: core.getInput('ref'),
-      committer: {
-        name: owner,
-        email
-      },
-      author: {
-        name: owner,
-        email
-      }
+      committer: userInfo,
+      author: userInfo
     })
     console.log(updateFileResponse)
   } catch (err) {
