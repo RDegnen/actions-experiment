@@ -27,14 +27,3 @@ async function run() {
 }
 
 run()
-// try {
-//   const nameToGreet = core.getInput('who-to-greet')
-//   console.log(`Hello ${nameToGreet}`)
-//   const time = (new Date()).toTimeString()
-//   core.setOutput("time", time)
-
-//   const payload = JSON.stringify(context.payload, undefined, 2)
-//   console.log('Event payload', payload)
-// } catch (err) {
-//   core.setFailed(err.message)
-// }
