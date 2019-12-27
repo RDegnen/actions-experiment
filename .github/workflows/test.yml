@@ -5,7 +5,7 @@ on: [push]
 jobs:
   test_job:
     env: 
-      tag: 'v1.0.5'
+      tag: 'v1.0.0'
     runs-on: ubuntu-latest
     name: A job that creates a release
     steps:
