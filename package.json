@@ -1,10 +1,11 @@
 {
   "name": "actions-experiment",
-  "version": "1.0.0",
+  "version": "v1.0.5",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/RDegnen/actions-experiment/issues"
   },
-  "homepage": "https://github.com/RDegnen/actions-experiment#readme"
+  "homepage": "https://github.com/RDegnen/actions-experiment#readme",
+  "devDependencies": {
+    "@actions/core": "^1.2.0",
+    "@actions/github": "^2.0.0",
+    "eslint": "^6.8.0"
+  }
 }

@@ -1,0 +1,35 @@
+name: Test Action
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  test_job:
+    env: 
+      tag: 'v1.0.5'
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: ubuntu-latest
+    name: A job that creates a release
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 10.x
+    - run: npm install
+    - name: Create release branch
+      id: release-branch
+      uses: ./.github/actions/test-action
+    # - uses: actions/checkout@v2
+    #   with:
+    #     ref: ${{ steps.release-branch.outputs.branch-name }}
+    # - run: npm install
+    - name: Update package.json
+      uses: ./.github/actions/update-package-file
+      with: 
+        ref: ${{ steps.release-branch.outputs.branch-name }}
+    - name: Create pull requests
+      uses: ./.github/actions/release-pull-request
+      with: 
+        ref: ${{ steps.release-branch.outputs.branch-name }}
