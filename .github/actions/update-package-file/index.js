@@ -24,21 +24,22 @@ async function run() {
         process.env.GITHUB_WORKSPACE,
         packageFileName
       )
+      console.log(packageFilePath)
       const packageObj = JSON.parse(await promisifyCallback(fs.readFile, packageFilePath))
       packageObj.version = process.env.tag
       const jsonPackage = JSON.stringify(packageObj, undefined, 2)
-  
+      console.log('1')
       const { data: { sha } } = await octokit.repos.getContents({
         owner,
         repo,
         path: packageFileName
       })
-  
+      console.log('2', sha)
       const userInfo = {
         name: owner,
         email
       }
-  
+      
       const updateFileResponse = await octokit.repos.createOrUpdateFile({
         owner,
         repo,
