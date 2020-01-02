@@ -1,6 +1,6 @@
 {
   "name": "actions-experiment",
-  "version": "1.0.0",
+  "version": "v1.0.4",
   "description": "",
   "main": "index.js",
   "scripts": {
