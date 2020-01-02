@@ -8,7 +8,7 @@ function run() {
     // can also get merged branch from payload to get the tag
     const octokit = new GitHub(process.env.GITHUB_TOKEN)
     const { merged, head } = context.payload
-    console.log(merged, head)
+    console.log(context.payload.pull_request)
 
     // use https://octokit.github.io/rest.js/#octokit-routes-repos-create-release to create a tag
   } catch (err) {
